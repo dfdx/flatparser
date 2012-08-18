@@ -6,41 +6,6 @@
         [flatparser geo util]
         [flatparser.parser putil]))
 
-;; (def ex-res
-;;   (html-resource
-;;    (java.io.StringReader.
-;;     (slurp "http://irr.tut.by/realestate/sale-flats/incity/6740237/"))))
-
-
-;; (defn fetch-links [list-res]
-;;   (map (comp #(str "http://irr.by" %) :href :attrs)
-;;        (select list-res [:td.tdTxt :div.h3 :a])))
-
-;; (defn parse-page
-;;   "Parses page with apartment description from irr.by.
-;;    Returns map of apartment parameters"
-;;   [url]
-;;   (assoc (fetch-params (html-resource (reader url)))
-;;     :url url))
-
-;; (defn parse-list-page
-;;   "Given URL (as string) of search results from irr.by
-;;    parses every result and produces list of maps,
-;;    each representing apartment parameters"
-;;   [url]
-;;   (doall (map #(do (println "Parsing" %) (parse-page %))
-;;               (fetch-links (html-resource (reader url))))))
-
-;; (defn parse-list [list-1-url]
-;;   (let [list-pages (cons list-1-url (map #(str list-1-url "/page" % "/")
-;;                                          (range 2 6)))]
-;;     (apply concat (map parse-list-page list-pages))))
-
-
-(def rl (make-resource "http://irr.tut.by/realestate/sale-flats/incity/search/offertype=%D0%BF%D1%80%D0%B5%D0%B4%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5/price=%D0%BE%D1%82%2040000%20%D0%B4%D0%BE%2060000/currency=USD/rooms=2/etage_all=%D0%BE%D1%82%205%20%D0%B4%D0%BE%2020/house_year=%D0%BE%D1%82%201951%20%D0%B4%D0%BE%202022/walltype=%D0%BF%D0%B0%D0%BD%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9/toilet=%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9/balcony=%D0%BB%D0%BE%D0%B4%D0%B6%D0%B8%D1%8F/"))
-
-(def r (make-resource "http://irr.tut.by/realestate/sale-flats/incity/6989690/"))
-
 
 (def subway-coords-mnk
   [[53.9084306 27.4793762] [53.9056244 27.5378537] [53.9153569 27.5828397]
@@ -147,7 +112,7 @@
         values (map (comp first :content) (select main [:div]))
         p-map (zipmap names values)]
     ;;(println p-map)
-    {:distance_to_sub (parse-dist-to-subway (p-map (param-names :street))
+    {:dist_to_sub (parse-dist-to-subway (p-map (param-names :street))
                                             (p-map (param-names :house)))
      :room_no (parse-int (p-map (param-names :room_no)))
      :size_t (parse-double (p-map (param-names :size_t)))
@@ -167,7 +132,6 @@
   (merge
    (fetch-main-params rsrc)
    {:price (fetch-price rsrc)
-    ;; :dist_to_subway (fetch-dist-to-subway rsrc)
     :dist_to_kp NA
     :district NA
     :date NA

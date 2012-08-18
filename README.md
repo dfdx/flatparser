@@ -17,11 +17,15 @@ Example:
 
 **IRR.BY / IRR.TUT.BY**
 
-Both - sale and rent of appartements in Minsk.
+Both sale and rent of appartements in Minsk.
 
 **RENT-AND-SALE.RU**
 
 Only rent for Moscow.
+
+**BN.RU**
+
+Long-term rent for Saint Petersburg
 
 ## License
 
