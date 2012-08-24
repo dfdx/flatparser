@@ -115,14 +115,8 @@
    :size_t "Общая площадь: "
    :size_l "Жилая площадь: "
    :size_k "Площадь кухни: "
-   ;; :state "Ремонт"
    :floor "Этаж/ Этажность: "
-   ;; :year_built "Год постройки"
    :floors "Этаж/ Этажность: "
-   ;; :restroom "Санузел"
-   ;; :balcony "Балкон / лоджия"
-   ;; :walls "Материал стен"
-   ;; :furniture "Мебель"
    :price "Цена: "
    })
 
@@ -138,36 +132,38 @@
 (defn param [p-map name]
   (p-map (param-names name)))
 
-(defn fetch-main-params
-  "Takes URL of page with flat description and
-   returns map with found params"
-  [rsrc]
+
+(defn parse-dist-to-kp [addr kp]
+  (if kp
+    (distance (coords-by-addr (str "Россия, Санкт-Петербург, " addr))
+              (coords-by-addr (str "Россия, Санкт-Петербург, " kp)))
+    NA))
+
+
+(defn fetch-params
+  "Takes parsed HTML resource of page with flat description
+   map of additional information. 
+   Returns map with found/calcuated params"
+  [rsrc info]
   (let [names (map get-content
                    (select rsrc [:td (attr= :width "40%")]))
         values (map get-content (select rsrc [:td.str]))
-        p-map (zipmap names values)]
-    p-map
-    ;;(println p-map)
-    {:dist_to_sub (parse-dist-to-subway (get-content (param p-map :address)))
+        p-map (zipmap names values)
+        coords (coords-by-addr (str "Россия, Санкт-Петербург, "
+                                    (param p-map :address)))]
+    {:price (parse-int (get-content (get-content (param p-map :price))))
+     :address (param p-map :address)
+     :lat (first coords)
+     :lon (second coords)
+     :dist_to_sub (parse-dist-to-subway (get-content (param p-map :address)))
+     :dist_to_kp (parse-dist-to-kp (param p-map :address) (:kp info))
      :room_no (parse-int (param p-map :room_no))
      :size_t (parse-double (param p-map :size_t))
      :size_l (parse-double (param p-map :size_l))
      :size_k (parse-double (param p-map :size_k))
-     ;; :state (parse-state (p-map (param-names :state)))
      :floor (parse-int (first (.split (param p-map :floor) "/")))
-     :floors (parse-int (second (.split (param p-map :floor) "/")))
-     ;; :restroom (parse-restroom (p-map (param-names :restroom)))
-     ;; :balcony (parse-balcony (p-map (param-names :restroom)))
-     ;; :year_built (parse-int (p-map (param-names :year_built)))
-     ;; :walls (parse-walls (p-map (param-names :walls)))
-     ;; :furniture (parse-furniture (p-map (param-names :furniture)))
-     :price (parse-int (get-content (get-content (param p-map :price))))
+     :floors (parse-int (second (.split (param p-map :floor) "/")))     
      }))
-
-(defn fetch-params [rsrc]
-  (merge
-   (fetch-main-params rsrc)))
-
 
 
 (defn fetch-links [rsrc]
@@ -178,15 +174,15 @@
 
 (defn collect-from
   "Collects data from 1 page of search results"
-  [url]
+  [url info]
   (map #(do (println "Fetching params from:" %)
-            (merge (fetch-params (bn-make-resource %)) {:url %}))
+            (merge (fetch-params (bn-make-resource %) info) {:url %}))
        (fetch-links (bn-make-resource url))))
 
 (defn collect-data
   "Takes URL of first page of search results
    and collects data from n first pages"
-  [url-p1 n]
+  [url-p1 n info]
   (let [list-pages (cons url-p1 (map #(str url-p1 "&start=" %)
                                      (map #(* % 50) (range 1 n))))]
-    (apply concat (map collect-from list-pages))))
+    (apply concat (map #(collect-from % info) list-pages))))
