@@ -4,13 +4,11 @@ Utility to create dataset from some real estate web sites (see list below)
 
 ## Usage
 
-**Graphical User Interface**
-
-**Flat Parser** has very simple graphical interface with self-descripting parameters. To run it, just double-click on flatparser.jar or type in command line:
+Flat Parser has very simple **GUI** with self-descripting parameters. To run it, just double-click on flatparser.jar or type in command line:
 
     java -jar flatparser.jar
 
-Flat Parser also has command line interface. Usage for it is as follows:
+There's also **command line interface**. Usage for it is as follows:
 
     java -jar flatparser.jar http://<search-url> <#-of-pages-to-fetch> <address-of-key-point> <path-to-output-file>
 
