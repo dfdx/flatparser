@@ -9,7 +9,8 @@
   (:require [flatparser.parser
              [rent-n-sale :as rns]
              [irrby :as irrby]
-             [bn :as bn]])
+             [bn :as bn]
+             [hemnet :as hemnet]])
   (:gen-class))
 
 
@@ -44,6 +45,7 @@
    (.startsWith url-p1 "http://irr.tut.by") irrby/collect-data
    (.startsWith url-p1 "http://rent-and-sale.ru") rns/collect-data
    (.startsWith url-p1 "http://www.bn.ru") bn/collect-data
+   (.startsWith url-p1 "http://www.hemnet.se") hemnet/collect-data
    :else nil))
 
 ;; shell
