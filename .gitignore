@@ -1,0 +1,12 @@
+*.class
+
+# IntelliJ Idea files
+*.iml
+
+# Maven POM (since Leiningen is used as build tool)
+pom.xml
+
+# Package Files #
+*.jar
+*.war
+*.ear
