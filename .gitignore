@@ -2,6 +2,7 @@
 
 # IntelliJ Idea files
 *.iml
+.idea/*
 
 # Maven POM (since Leiningen is used as build tool)
 pom.xml
