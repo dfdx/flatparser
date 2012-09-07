@@ -34,11 +34,10 @@
     (println (get (get (first (select parsed-resource [[:meta (attr= :name "description")]])) :attrs) :content))))
 
 (defn fetch-results
-  "Sends POST request to prepare server-side object with information about search parameters and parses first N pages of results
-  TODO: тут бы хорошо таки указать сортировку по другим параметрам. По умолчанию сортируется как попало: то по цене, то по времени нахождения на сайте"
+  "Sends POST request to prepare server-side object with information about search parameters and parses first N pages of results"
   [base-url search-params num-pages info]
   (let [post-url (str base-url "/sok/create")]
-    (println "Sending POST with params" search-params "to:" post-url)
+    ;(println "Sending POST with params" search-params "to:" post-url)
     (let [my-cs (clj-http.cookies/cookie-store)]
       (client/post post-url {:debug false,
                              :debug-body false,
@@ -52,7 +51,11 @@
                                                          [k v]))
                                                      search-params))}})
       (let [results-url (str base-url "/resultat"),
+            sort-url (str results-url "/sortera?by=price"),
+            sort-order-url (str results-url "/sortera?order=desc"),
             list-pages (cons results-url (map #(str results-url "?page=" %) (range 2 (+ num-pages 1))))]
+        (client/get sort-url {:cookie-store my-cs})
+        (client/get sort-order-url {:cookie-store my-cs})
         (apply concat (map #(collect-from % my-cs info) list-pages))))))
 
 (defn collect-data
