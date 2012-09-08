@@ -147,7 +147,7 @@
       :address address
       :lat (first coords)
       :lon (second coords)
-      :dist_to_sub (parse-dist-to-subway coords)
+      :dist_to_subway (parse-dist-to-subway coords)
       :dist_to_kp (parse-dist-to-key-point coords (:kp info))
       :room_no (parse-int (param params :room_no ))
       :size_t (parse-double (param params :size_t ))
