@@ -15,7 +15,7 @@
 
 
 (def feat-order
-  [:price :clazz :room_no :size_t :size_l :size_k :dist_to_subway :dist_to_kp
+  [:price :price_square_meter :monthly_fee :clazz :room_no :size_t :size_l :size_k :dist_to_subway :dist_to_kp
    :state :beds :furniture :district :subway :floor :floors :year_built
    :walls :date :address :lat :lon :url])
 
@@ -33,10 +33,10 @@
 
 (defn write-csv [filepath dataset]
   (with-open [wr (writer filepath)]
-    (cl-format wr "~{~a~^,~}~%" (map #(.replaceAll (name %) "-" "_")
+    (cl-format wr "~{~a~^;~}~%" (map #(.replaceAll (name %) "-" "_")
                                      (first dataset)))
     (doseq [obs (rest dataset)]
-      (cl-format wr "~{~a~^,~}~%" obs))))
+      (cl-format wr "~{~a~^;~}~%" obs))))
 
 
 (defn make-collector [url-p1]
@@ -89,4 +89,3 @@
     (run-gui)
     (let [[url-p1 n kp out-file] args]
       (run-shell url-p1 n kp out-file))))
-
