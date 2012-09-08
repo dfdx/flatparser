@@ -9,14 +9,15 @@
   (:require [flatparser.parser
              [rent-n-sale :as rns]
              [irrby :as irrby]
-             [bn :as bn]])
+             [bn :as bn]
+             [hata :as hata]])
   (:gen-class))
 
 
 (def feat-order
-  [:price :clazz :room_no :size_t :size_l :size_k :dist_to_subway :dist_to_kp
-   :state :beds :furniture :district :subway :floor :floors :year_built
-   :walls :date :address :lat :lon :url])
+  [:price :kind :clazz :room_no :size_t :size_l :size_k :dist_to_subway
+   :dist_to_kp :state :beds :furniture :district :subway :floor :floors
+   :year_built :walls :date :address :lat :lon :url])
 
 (defn map-values [order feats]
   (vec (map #(or (feats %) NA) order)))
@@ -30,12 +31,19 @@
   (cons feat-order (map #(map-values feat-order %) maps)))
 
 
+(defn escape-str
+  "If obj is string, escape"
+  [obj]
+  (if (and (= (class obj) String) (not= obj NA))
+    (str "\"" obj "\"")
+    obj))
+
 (defn write-csv [filepath dataset]
   (with-open [wr (writer filepath)]
     (cl-format wr "~{~a~^,~}~%" (map #(.replaceAll (name %) "-" "_")
                                      (first dataset)))
     (doseq [obs (rest dataset)]
-      (cl-format wr "~{~a~^,~}~%" obs))))
+      (cl-format wr "~{~a~^,~}~%" (map escape-str obs)))))
 
 
 (defn make-collector [url-p1]
@@ -44,6 +52,7 @@
    (.startsWith url-p1 "http://irr.tut.by") irrby/collect-data
    (.startsWith url-p1 "http://rent-and-sale.ru") rns/collect-data
    (.startsWith url-p1 "http://www.bn.ru") bn/collect-data
+   (.startsWith url-p1 "http://www.hata.by") hata/collect-data
    :else nil))
 
 ;; shell

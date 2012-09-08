@@ -23,7 +23,11 @@ Example:
 
 **IRR.BY / IRR.TUT.BY**
 
-Both sale and rent of appartements in Minsk.
+Both sale and rent of appartements in Minsk
+
+**HATA.BY**
+
+Office rent
 
 **RENT-AND-SALE.RU**
 
