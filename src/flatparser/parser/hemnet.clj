@@ -8,59 +8,212 @@
         [flatparser.parser putil])
   (:gen-class ))
 
-(def subway-stations-green-line
-  ["Hässelby strand"
-   "Hässelby gård"
-   "Johannelund"
-   "Vällingby"
-   "Råksta"
-   "Blackberg"
-   "Islandstorget"
-   "Ängbyplan"
-   "Åkeshov"
-   "Brommaplan"
-   "Abrahamsberg"
-   "Stora Mossen"
-   "Alvik"
-   "Kristineberg"
-   "Thorildsplan"
-   "Fridhemsplan"
-   "S:t Eriksplan"
-   "Odenplan"
-   "Rådmansgatan"
-   "Hötorget"
-   "T-Centralen"
-   "Gamla stan"
-   "Slussen"
-   "Medborgarplatsen"
-   "Skanstull"
-   "Gullmarsplan"
-   "Globen"
-   "Enskede gård"
-   "Sockenplan"
-   "Svedmyra"
-   "Stureby"
-   "Bandhagen"
-   "Högdalen"
-   "Rågsved"
-   "Hagsätra"
-   "Skärmarbrink"
-   "Blåsut"
-   "Sandsborg"
-   "Skogskyrkogården"
-   "Tallkrogen"
-   "Gubbängen"
-   "Hökarängen"
-   "Farsta"
-   "Farsta strand"
-   "Hammarbyhöjden"
-   "Björkhagen"
-   "Kärrtorp"
-   "Bagarmossen"
-   "Skarpnäck"])
+(def subway-stations
+  {"(G) Hässelby strand" [59.36128660000001 17.8323518]
+   "(G) Hässelby gård" [59.3669003 17.8437692]
+   "(G) Johannelund" [59.3679426 17.8574655]
+   "(G) Vällingby" [59.36324949999999 17.8720631]
+   "(G) Råksta" [59.3548066 17.8818198]
+   "(G) Blackberg" [59.3483529 17.8827972]
+   "(G) Islandstorget" [59.34585689999999 17.8940196]
+   "(G) Ängbyplan" [59.34188520000001 17.9070478]
+   "(G) Åkeshov" [59.3420363 17.9248998]
+   "(G) Brommaplan" [59.33838979999999 17.9392617]
+   "(G) Abrahamsberg" [59.33668340000001 17.9529522]
+   "(G) Stora Mossen" [59.334534 17.9661914]
+   "(G) Alvik" [59.3336355 17.9802646]
+   "(G) Kristineberg" [59.33281110000001 18.003182]
+   "(G) Thorildsplan" [59.3318137 18.0154371]
+   "(GB) Fridhemsplan" [59.3343715 18.0324055]
+   "(G) S:t Eriksplan" [59.3396541 18.0369877]
+   "(G) Odenplan" [59.3429559 18.0497038]
+   "(G) Rådmansgatan" [59.3405724 18.0587755]
+   "(G) Hötorget" [59.33553310000001 18.063539]
+   "(RGB) T-Centralen" [59.3309466 18.0592629]
+   "(RG) Gamla stan" [59.3231599 18.0676203]
+   "(RG) Slussen" [59.3194951 18.072331]
+   "(G) Medborgarplatsen" [59.31433730000001 18.073551]
+   "(G) Skanstull" [59.30785210000001 18.0762277]
+   "(G) Gullmarsplan" [59.2991161 18.0807724]
+   "(G) Globen" [59.2942798 18.0779742]
+   "(G) Enskede gård" [59.2893938 18.0702939]
+   "(G) Sockenplan" [59.28330020000001 18.0705911]
+   "(G) Svedmyra" [59.27763840000001 18.0672321]
+   "(G) Stureby" [59.27459769999999 18.0556262]
+   "(G) Bandhagen" [59.2704022 18.0494902]
+   "(G) Högdalen" [59.2637969 18.0430047]
+   "(G) Rågsved" [59.2565804 18.0281349]
+   "(G) Hagsätra" [59.26272840000001 18.0124874]
+   "(G) Skärmarbrink" [59.2953638 18.0904409]
+   "(G) Blåsut" [59.2902433 18.0910631]
+   "(G) Sandsborg" [59.2847872 18.0923821]
+   "(G) Skogskyrkogården" [59.27919180000001 18.0954989]
+   "(G) Tallkrogen" [59.2711356 18.0853267]
+   "(G) Gubbängen" [59.2628777 18.0820388]
+   "(G) Hökarängen" [59.2579216 18.0824974]
+   "(G) Farsta" [59.243553 18.0932839]
+   "(G) Farsta strand" [59.23500769999999 18.1017369]
+   "(G) Hammarbyhöjden" [59.29476529999999 18.1045506]
+   "(G) Björkhagen" [59.29111390000001 18.1155212]
+   "(G) Kärrtorp" [59.2845051 18.1144767]
+   "(G) Bagarmossen" [59.27626429999999 18.131465]
+   "(G) Skarpnäck" [59.2668195 18.133347]
+   "(R) Mörby centrum" [59.3987091 18.0362204]
+   "(R) Danderyds sjukhus" [59.3919041 18.0413718]
+   "(R) Bergshamra" [59.3655675 18.0548911]
+   "(R) Universitetet" [59.348357 18.072032]
+   "(R) Tekniska Högskolan" [59.3429669 18.0817007]
+   "(R) Stadion" [59.3349729 18.0740827]
+   "(R) Östermalmstorg" [59.3169577 18.0633084]
+   "(R) Mariatorget" [59.3177777 18.0501522]
+   "(R) Zinkensdamm" [59.3158365 18.0340214]
+   "(R) Hornstull" [59.3107063 18.0231301]
+   "(R) Liljeholmen" [59.301852 18.0120361]
+   "(R) Midsommarkransen" [59.29832139999999 17.9972352]
+   "(R) Telefonplan" [59.2955713 17.9791519]
+   "(R) Hägerstensåsen" [59.291379 17.9666675]
+   "(R) Västertorp" [59.285929 17.9650058]
+   "(R) Fruängen" [59.3572983 18.1022179]
+   "(R) Ropsten" [59.3472023 18.0987932]
+   "(R) Gårdet" [59.3388106 18.0908621]
+   "(R) Karlaplan" [59.30644900000001 18.0014459]
+   "(R) Aspudden" [59.3055324 17.9891998]
+   "(R) Örnsberg" [59.3044155 17.9754315]
+   "(R) Axelsberg" [59.3009181 17.957282]
+   "(R) Mälarhöjden" [59.29483829999999 17.9338136]
+   "(R) Bredäng" [59.28498399999999 17.92137]
+   "(R) Sätra" [59.27714400000001 17.9070051]
+   "(R) Skärholmen" [59.2759332 17.8901577]
+   "(R) Vårberg" [59.2646124 17.8843974]
+   "(R) Vårby gård" [59.2496816 17.8803326]
+   "(R) Masmo" [59.24746560000001 17.8609676]
+   "(R) Fittja" [59.2394955 17.8453281]
+   "(R) Alby" [59.2432692 17.825607]
+   "(R) Hallunda" [59.24379089999999 17.8145252]
+   "(R) Norsborg" [59.3967421 17.8884515]
+   "(B) Hjulsta" [59.3944823 17.9011652]
+   "(B) Tensta" [59.3881634 17.9287814]
+   "(B) Rinkeby" [59.37584080000001 17.9399593]
+   "(B) Rissne" [59.3678923 17.9646175]
+   "(B) Duvbo" [59.36089699999999 17.9722113]
+   "(B) Sundbybergs centrum" [59.35418669999999 17.9739819]
+   "(B) Vreten" [59.3495465 17.9856954]
+   "(B) Huvudsta" [59.3474793 18.0039891]
+   "(B) Västra skogen" [59.3369631 18.0173183]
+   "(B) Stadshagen" [59.33029990000001 18.0420682]
+   "(B) Rådhuset" [59.33078399999999 18.0732938]
+   "(B) Kungsträdgården" [59.41481289999999 17.9127974]
+   "(B) Akalla" [59.410259 17.9256372]
+   "(B) Husby" [59.4028644 17.9424336]
+   "(B) Kista" [59.3754487 17.9692153]
+   "(B) Hallonbergen" [59.3667379 17.9832797]
+   "(B) Näckrosen" [59.3588602 17.9989737]})
 
-(def subway-coords-green-line
+(def subway-stations-old
+  ["(G) Hässelby strand"
+   "(G) Hässelby gård"
+   "(G) Johannelund"
+   "(G) Vällingby"
+   "(G) Råksta"
+   "(G) Blackberg"
+   "(G) Islandstorget"
+   "(G) Ängbyplan"
+   "(G) Åkeshov"
+   "(G) Brommaplan"
+   "(G) Abrahamsberg"
+   "(G) Stora Mossen"
+   "(G) Alvik"
+   "(G) Kristineberg"
+   "(G) Thorildsplan"
+   "(GB) Fridhemsplan"
+   "(G) S:t Eriksplan"
+   "(G) Odenplan"
+   "(G) Rådmansgatan"
+   "(G) Hötorget"
+   "(RGB) T-Centralen"
+   "(RG) Gamla stan"
+   "(RG) Slussen"
+   "(G) Medborgarplatsen"
+   "(G) Skanstull"
+   "(G) Gullmarsplan"
+   "(G) Globen"
+   "(G) Enskede gård"
+   "(G) Sockenplan"
+   "(G) Svedmyra"
+   "(G) Stureby"
+   "(G) Bandhagen"
+   "(G) Högdalen"
+   "(G) Rågsved"
+   "(G) Hagsätra"
+   "(G) Skärmarbrink"
+   "(G) Blåsut"
+   "(G) Sandsborg"
+   "(G) Skogskyrkogården"
+   "(G) Tallkrogen"
+   "(G) Gubbängen"
+   "(G) Hökarängen"
+   "(G) Farsta"
+   "(G) Farsta strand"
+   "(G) Hammarbyhöjden"
+   "(G) Björkhagen"
+   "(G) Kärrtorp"
+   "(G) Bagarmossen"
+   "(G) Skarpnäck"
+   "(R) Mörby centrum"
+   "(R) Danderyds sjukhus"
+   "(R) Bergshamra"
+   "(R) Universitetet"
+   "(R) Tekniska Högskolan"
+   "(R) Stadion"
+   "(R) Östermalmstorg"
+   "(R) Mariatorget"
+   "(R) Zinkensdamm"
+   "(R) Hornstull"
+   "(R) Liljeholmen"
+   "(R) Midsommarkransen"
+   "(R) Telefonplan"
+   "(R) Hägerstensåsen"
+   "(R) Västertorp"
+   "(R) Fruängen"
+   "(R) Ropsten"
+   "(R) Gårdet"
+   "(R) Karlaplan"
+   "(R) Aspudden"
+   "(R) Örnsberg"
+   "(R) Axelsberg"
+   "(R) Mälarhöjden"
+   "(R) Bredäng"
+   "(R) Sätra"
+   "(R) Skärholmen"
+   "(R) Vårberg"
+   "(R) Vårby gård"
+   "(R) Masmo"
+   "(R) Fittja"
+   "(R) Alby"
+   "(R) Hallunda"
+   "(R) Norsborg"
+   "(B) Hjulsta"
+   "(B) Tensta"
+   "(B) Rinkeby"
+   "(B) Rissne"
+   "(B) Duvbo"
+   "(B) Sundbybergs centrum"
+   "(B) Vreten"
+   "(B) Huvudsta"
+   "(B) Västra skogen"
+   "(B) Stadshagen"
+   "(B) Rådhuset"
+   "(B) Kungsträdgården"
+   "(B) Akalla"
+   "(B) Husby"
+   "(B) Kista"
+   "(B) Hallonbergen"
+   "(B) Näckrosen"
+   "(B) Solna centrum"])
+
+(def subway-coords
   [
+    ; Green line
     [59.36128660000001 17.8323518] [59.3669003 17.8437692] [59.3679426 17.8574655] [59.36324949999999 17.8720631] [59.3548066 17.8818198]
     [59.3483529 17.8827972] [59.34585689999999 17.8940196] [59.34188520000001 17.9070478] [59.3420363 17.9248998] [59.33838979999999 17.9392617]
     [59.33668340000001 17.9529522] [59.334534 17.9661914] [59.3336355 17.9802646] [59.33281110000001 18.003182] [59.3318137 18.0154371]
@@ -71,6 +224,19 @@
     [59.2953638 18.0904409] [59.2902433 18.0910631] [59.2847872 18.0923821] [59.27919180000001 18.0954989] [59.2711356 18.0853267]
     [59.2628777 18.0820388] [59.2579216 18.0824974] [59.243553 18.0932839] [59.23500769999999 18.1017369] [59.29476529999999 18.1045506]
     [59.29111390000001 18.1155212] [59.2845051 18.1144767] [59.27626429999999 18.131465] [59.2668195 18.133347]
+    ; Red line
+    [59.3987091 18.0362204] [59.3919041 18.0413718] [59.3655675 18.0548911] [59.348357 18.072032] [59.3429669 18.0817007]
+    [59.3349729 18.0740827] [59.3169577 18.0633084] [59.3177777 18.0501522] [59.3158365 18.0340214] [59.3107063 18.0231301]
+    [59.301852 18.0120361] [59.29832139999999 17.9972352] [59.2955713 17.9791519] [59.291379 17.9666675] [59.285929 17.9650058]
+    [59.3572983 18.1022179] [59.3472023 18.0987932] [59.3388106 18.0908621] [59.30644900000001 18.0014459] [59.3055324 17.9891998]
+    [59.3044155 17.9754315] [59.3009181 17.957282] [59.29483829999999 17.9338136] [59.28498399999999 17.92137] [59.27714400000001 17.9070051]
+    [59.2759332 17.8901577] [59.2646124 17.8843974] [59.2496816 17.8803326] [59.24746560000001 17.8609676] [59.2394955 17.8453281]
+    [59.2432692 17.825607] [59.24379089999999 17.8145252]
+    ; Blue line
+    [59.3967421 17.8884515] [59.3944823 17.9011652] [59.3881634 17.9287814] [59.37584080000001 17.9399593] [59.3678923 17.9646175]
+    [59.36089699999999 17.9722113] [59.35418669999999 17.9739819] [59.3495465 17.9856954] [59.3474793 18.0039891] [59.3369631 18.0173183]
+    [59.33029990000001 18.0420682] [59.33078399999999 18.0732938] [59.41481289999999 17.9127974] [59.410259 17.9256372] [59.4028644 17.9424336]
+    [59.3754487 17.9692153] [59.3667379 17.9832797] [59.3588602 17.9989737]
     ])
 
 (def param-names
@@ -124,7 +290,7 @@
 
 (defn parse-dist-to-subway [coords]
   (if-not (empty? coords)
-    (nearest-subway subway-coords-green-line coords)
+    (nearest-subway subway-coords coords)
     NA))
 
 (defn parse-dist-to-key-point [coords key-point]
@@ -200,3 +366,19 @@
   (let [base-url (extract-base-url url-p1) search-params (extract-search-params url-p1)]
     (fetch-results base-url search-params num-pages info))
   )
+
+(defn distances-to-subway [subway-stations subway-coords coords]
+  (into {} (map (fn [station-name station-coords] [station-name (distance station-coords coords)]) subway-stations subway-coords)))
+
+(defn build-distance-to-coords-map [subway-coords coords]
+  (into {} (map (fn [station-coords] [(distance station-coords coords) station-coords]) subway-coords)))
+
+(defn build-coords-to-name-map [subway-coords subway-stations]
+  (into {} (map (fn [station-coords station-name] [station-coords station-name]) subway-coords subway-stations)))
+
+
+(let [dc (build-distance-to-coords-map subway-coords [59.0, 18.0]),
+      cn (build-coords-to-name-map subway-coords subway-stations-old),
+      min-dist (apply min (keys dc)),
+      min-coords (get dc min-dist)]
+  (println (get cn min-coords)))
