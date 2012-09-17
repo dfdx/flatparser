@@ -163,7 +163,7 @@
     (let [dist-to-name (into {} (map (fn [[n c]] [(distance coords c) n]) subway-stations))
           min-dist (apply min (keys dist-to-name))]
       [(get dist-to-name min-dist) min-dist])
-    NA))
+    [NA NA]))
 
 (defn parse-dist-to-key-point [coords key-point]
   (if key-point
@@ -178,7 +178,7 @@
         params (zipmap names values)
         address (fetch-street-address resource)
         coords (coords-by-addr (full-address address))
-        nearest-subway (find-nearest-subway  coords)]
+        nearest-subway (find-nearest-subway coords)]
     {
       :price (parse-price (param params :price ))
       :price_square_meter (parse-price (param params :price_square_meter ))
@@ -234,9 +234,20 @@
                   (println "Fetching parameters from:" %)
                   (fetch-params % my-cs info)) ap-urls))))))
 
+
+(defn is-valid
+  "Takes a maps and checks it for the precense of required parameters"
+  [m]
+  (and
+    (not= (:price m) NA)
+    (not= (:monthly_fee m) NA)
+    (not= (:dist_to_subway m) NA)
+    (not= (:room_no m) NA)
+    (not= (:size_t m) NA)
+    (<= (:dist_to_subway m) 650)))
+
 (defn collect-data
   "Collects data from Hemnet site"
   [url-p1 num-pages info]
   (let [base-url (extract-base-url url-p1) search-params (extract-search-params url-p1)]
-    (fetch-results base-url search-params num-pages info))
-  )
+    (filter is-valid (fetch-results base-url search-params num-pages info))))
