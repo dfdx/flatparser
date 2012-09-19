@@ -16,6 +16,8 @@ Example:
 
     java -jar flatparser.jar 'http://rent-and-sale.ru/moscow/rent-flat/results/roomsfrom=1&roomsto=2&apartmenttype=flat&searcharea=city&pricefrom=30000&priceto=70000&currency=rub&pricespecification=monthly&pagesize=10' 5 'Balchug, 7' /home/user/dataset.csv
 
+Flat Parser has also GUI for Hemnet site to search apartments in Sweden. Since Hemnet uses POST request to initialize search for apartments, it was impractical to use URLs.
+However, fake URL mode is also available, so it is possible to search on Hemnet from the command line. Just provide search parameters as a regular query string and Flat Parser will generate POST query from them.
 
 ## Available web sites
 
