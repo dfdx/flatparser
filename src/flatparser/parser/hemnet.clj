@@ -128,10 +128,10 @@
 
 (defn extract-search-params
   "Extracts query string from fake full URL and converts it to the map"
-  [url-p1]
+  [url-p1 default-params]
   (let [param-string (last (.split url-p1 "\\?")), param-map (MultiMap.)]
     (UrlEncoded/decodeTo param-string param-map "UTF-8")
-    (into {} (map (fn [[k v]] [(keyword k) v]) param-map))))
+    (into default-params (map (fn [[k v]] [(keyword k) v]) param-map))))
 
 (defn make-resource-from-url
   [url cookie-store]
@@ -238,17 +238,17 @@
 
 (defn is-valid
   "Takes a maps and checks it for the precense of required parameters"
-  [m]
+  [m values-to-compare-with]
   (and
     (not= (:price m) NA)
     (not= (:monthly_fee m) NA)
     (not= (:dist_to_subway m) NA)
     (not= (:room_no m) NA)
     (not= (:size_t m) NA)
-    (<= (:dist_to_subway m) 650)))
+    (if (contains? values-to-compare-with :dist_to_subway_max) (<= (:dist_to_subway m) (:dist_to_subway_max values-to-compare-with)) true)))
 
 (defn collect-data
   "Collects data from Hemnet site"
   [url-p1 num-pages info]
-  (let [base-url (extract-base-url url-p1) search-params (extract-search-params url-p1)]
-    (filter is-valid (fetch-results base-url search-params num-pages info))))
+  (let [base-url (extract-base-url url-p1) search-params (extract-search-params url-p1 info)]
+    (filter #(is-valid % info) (fetch-results base-url search-params num-pages info))))
