@@ -4,6 +4,7 @@
            [java.io StringReader])
   (:use [net.cgrand enlive-html]
         [clojure.java io]
+        [clojure.data json]
         [flatparser geo util]
         [flatparser.parser putil])
   (:gen-class ))
@@ -159,11 +160,20 @@
     (.contains year-str "/") (parse-int (.substring year-str 0 (.indexOf year-str "/")))
     :else (parse-int year-str)))
 
+(defn walking-distance [coords1 coords2]
+  (if (and (not (empty? coords1)) (not (empty? coords2)))
+    (let [base-url "http://maps.googleapis.com/maps/api/directions/json?sensor=false&mode=walking"
+          [x1 y1] coords1 [x2 y2] coords2
+          response (slurp (str base-url "&origin=" x1 "," y1 "&destination=" x2 "," y2))]
+      (do (java.lang.Thread/sleep 500) ((comp :value :distance first :legs first :routes) (read-json response))))
+    NA))
+
 (defn find-nearest-subway [coords]
   (if-not (empty? coords)
     (let [dist-to-name (into {} (map (fn [[n c]] [(distance coords c) n]) subway-stations))
-          min-dist (apply min (keys dist-to-name))]
-      [(get dist-to-name min-dist) min-dist])
+          min-dist (apply min (keys dist-to-name))
+          nearest-station (get dist-to-name min-dist)]
+      [nearest-station (walking-distance coords (get subway-stations nearest-station))])
     [NA NA]))
 
 (defn parse-dist-to-key-point [coords key-point]
