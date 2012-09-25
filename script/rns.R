@@ -1,0 +1,75 @@
+
+initial <- read.csv("rnsdataset.csv")
+dat <- initial
+dat <- dat[c("price", "clazz", "room_no", "size_t", "size_l", "dist_to_subway",
+             "dist_to_kp", "state",
+             "floor", "floors", "year_built", "walls")]
+dat <- dat[, !apply(is.na(dat), 2, all)]  # remove all columns with NAs only
+dat <- dat[!is.na(dat["price"]), ]        # remove data without price
+
+
+naToMean <- function(v) {
+  m <- mean(v, na.rm = TRUE)
+  v[is.na(v)] <- m
+  v
+}
+
+naToMode <- function(v) {
+  tbl <- table(v)
+  md <- tbl[which.max(tbl)]
+  v[is.na(v)] <- attr(md, "names")
+  v  
+}
+
+dat$size_t <- naToMean(dat$size_t)
+dat$dist_to_subway <- naToMean(dat$dist_to_subway)
+dat$dist_to_kp <- naToMean(dat$dist_to_kp)
+dat$floor <- naToMean(dat$floor)
+dat$floors <- naToMean(dat$floors)
+dat$year_built <- naToMean(dat$year_built)
+
+dat$state <- naToMode(dat$state)
+dat$walls <- naToMode(dat$walls)
+
+library(dummies)
+myDummy <- function(name, df) {
+  d <- dummy(name, data = df)
+  l <- dim(d)[2]
+  d[, -c(l)]
+}
+
+
+# reconstruct data frame
+
+dat.num <- dat[-c(4, 5, 9)]  # - (dist_to_kp, state, walls)
+dummy.state <- dummy("state", dat)
+dummy.walls <- dummy("walls", dat)
+final <- cbind(dat.num, dummy.state[, -1], dummy.walls[, -1])
+names(final) <- c("price", "size.t", "dist.to.subway", "floor",         
+                  "floors", "year.built", "state.normal", "walls.brick",   
+                  "walls.monolit", "walls.panel")
+
+
+# building model
+
+# model <- lm(price ~ ., data = final)
+# model <- lm(price ~ size.t + offset(2 * dist.to.subway) + floor + floors +
+#              year.built + state.normal + walls.brick + walls.monolit +
+#              walls.panel, final)
+model <- lm(price ~ dist.to.subway + year.built + state.normal +
+            walls.brick + walls.monolit + walls.panel,
+            final)
+
+price <- final$price
+cost <- predict(model, final)
+rank <- sort(price / cost)
+urls <- initial[names(rank), "url"]
+
+# visualisation
+
+plot(density(price))
+
+
+plot(cost, price)
+l <- lm(price ~ cost)
+abline(l)
