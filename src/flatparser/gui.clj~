@@ -1,0 +1,30 @@
+
+(ns flatparser.core
+  (:refer-clojure)
+  (:use [clojure pprint repl]
+        [clojure.data json]
+        [clojure.java io]
+        [flatparser util]
+        [seesaw core])
+  (:require [flatparser.parser
+             [rent-n-sale :as rns]
+             [irrby :as irrby]
+             [bn :as bn]]))
+
+
+(native!)
+
+
+(defn make-window []
+  (let [f (frame :title "Flat Parser" :minimum-size [400 :by 100])
+        url-text (text :text "URL of search result page")
+        n-text (text "# of pages to fetch")
+        out-file (text "Path to output file")
+        log-area (text :multi-line? true :rows 20 :text "foo")
+        btn (button :text "Parse" :halign :center)
+        main-panel (vertical-panel
+                    :items [url-text n-text out-file log-area btn])]    
+    (config! f :content main-panel)
+    (listen btn :action (fn [e] (text! log-area
+                                       (apply str (repeat 40 "Booo!\n")))))
+    (-> f pack! show!)))
