@@ -12,11 +12,11 @@
              [bn :as bn]
 		     [hata :as hata]
              [hemnet :as hemnet]])
-  (:gen-class ))
+  (:gen-class))
 
 
 (def feat-order
-  [:price :price_square_meter :monthly_fee kind :clazz :room_no :size_t :size_l :size_k :dist_to_subway :dist_to_kp :state :beds :furniture :district :subway :floor :floors :year_built :walls :date :address :lat :lon :url ])
+  [:price :price_square_meter :monthly_fee :kind :clazz :room_no :size_t :size_l :size_k :dist_to_subway :dist_to_kp :state :beds :furniture :district :subway :floor :floors :year_built :walls :date :address :lat :lon :url ])
 
 (defn map-values [order feats]
   (vec (map #(or (feats %) NA) order)))
