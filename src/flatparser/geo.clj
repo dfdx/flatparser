@@ -33,4 +33,6 @@
   "Given list of subway coordinates and coordinates of some point
    returns distance to nearest subway"
   [subways coords]
-  (apply min (map #(distance % coords) subways)))
+  (if-not (empty? coords)
+    (apply min (map #(distance % coords) subways))
+    NA))
