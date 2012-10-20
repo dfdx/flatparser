@@ -1,0 +1,20 @@
+beds
+clazz
+date
+district
+dist_to_sub
+dist_to_kp (~ distance to keypoint)
+floor
+floors
+furniture
+size_t
+size_l
+size_k
+subway
+state
+room_no
+restroom
+price
+address
+lat
+lon

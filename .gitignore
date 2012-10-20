@@ -1,4 +1,7 @@
 *.class
+*.csv
+*.html
+*.~
 
 # IntelliJ Idea files
 *.iml

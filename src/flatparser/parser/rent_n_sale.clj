@@ -266,9 +266,11 @@
       NA)))
 
 (defn parse-furniture [furniture-str]
-  (case (.toLowerCase furniture-str)
-    "нет" 0
-    "есть" 1
+  (if furniture-str
+    (case (.toLowerCase furniture-str)
+      "нет" 0
+      "есть" 1
+      NA)
     NA))
 
 

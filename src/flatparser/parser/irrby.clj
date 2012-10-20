@@ -1,7 +1,7 @@
 (ns flatparser.parser.irrby
   (:refer-clojure)
   (:use [net.cgrand enlive-html]
-        [clojure pprint repl]
+        [clojure pprint repl string]
         [clojure.java io]
         [flatparser geo util]
         [flatparser.parser putil]))
@@ -95,9 +95,9 @@
         (= balcony-str "нет") 0
         :else 1))
 
-(defn parse-dist-to-subway [street house]
-  (if street
-    (let [coords (coords-by-addr (str "Беларусь, Минск, " street ", " house))]
+(defn parse-dist-to-subway [address]
+  (if address
+    (let [coords (coords-by-addr (str "Беларусь, Минск, " address))]
       (if-not (empty? coords)
         (nearest-subway subway-coords-mnk coords)
         NA))
@@ -123,8 +123,8 @@
 (defn param [p-map name]
   (p-map (param-names name)))
 
-(defn address [p-map]
-  (str (param p-map :street) ", " (param p-map :house)))
+;; (defn address [p-map]
+;;   (str (param p-map :street) ", " (param p-map :house)))
 
 (defn parse-dist-to-kp [addr kp]
   (if kp
@@ -132,23 +132,27 @@
               (coords-by-addr (str "Беларусь, Минск, " kp)))
     NA))
 
+(defn my-triml [s chars]
+  (apply str (drop-while (fn [ch] (some #(= ch %) chars)) s)))
+
 (defn fetch-params
   "Takes parsed HTML resource of page with flat description
    map of additional information. 
    Returns map with found/calcuated params"
   [rsrc info]
   (let [main (select rsrc [:table#mainParams])
-        names (rest (map (comp first :content) (select main [:span])))
+        names (map (comp first :content) (select main [:span]))
         values (map (comp first :content) (select main [:div]))
         p-map (zipmap names values)
-        coords (coords-by-addr (str "Беларусь, Минск, " (address p-map)))]
+        address (my-triml (-> (select rsrc [:table#geoData :tr :td])
+                    first :content second) ", ")
+        coords (coords-by-addr (str "Беларусь, Минск, " address))]
     {:price (fetch-price rsrc)
-     :address (address p-map)
+     :address address
      :lat (first coords)
      :lon (second coords)
-     :dist_to_sub (parse-dist-to-subway (param p-map :street)
-                                        (param p-map :house))
-     :dist_to_kp (parse-dist-to-kp (address p-map) (:kp info))
+     :dist_to_subway (parse-dist-to-subway address)
+     :dist_to_kp (parse-dist-to-kp address (:kp info))
      :room_no (parse-int (param p-map :room_no))
      :size_t (parse-double (param p-map :size_t))
      :size_l (parse-double (param p-map :size_l))

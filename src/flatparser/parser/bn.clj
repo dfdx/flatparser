@@ -155,7 +155,8 @@
      :address (param p-map :address)
      :lat (first coords)
      :lon (second coords)
-     :dist_to_sub (parse-dist-to-subway (get-content (param p-map :address)))
+     :dist_to_subway (parse-dist-to-subway (get-content
+                                            (param p-map :address)))
      :dist_to_kp (parse-dist-to-kp (param p-map :address) (:kp info))
      :room_no (parse-int (param p-map :room_no))
      :size_t (parse-double (param p-map :size_t))

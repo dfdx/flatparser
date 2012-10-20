@@ -1,0 +1,5 @@
+#!/bin/bash
+lein uberjar
+rm flatparser.jar
+mv flatparser-1.0.0-SNAPSHOT-standalone.jar flatparser.jar
+java -jar flatparser.jar
